@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Thirsty Crow Story</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      max-width: 600px;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .page-number {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .story-image {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin: 20px 0;
+      transition: opacity 0.5s;
+    }
+
+    .text-box {
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      min-height: 120px;
+      transition: opacity 0.5s;
+      text-align: center;
+    }
+
+    .navigation {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .btn {
+      background-color: #007aff;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 600px) {
+      .title {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <div class="title">The Thirsty Crow</div>
+      <div class="page-number" id="page-number">Page 1 of 15</div>
+    </div>
+
+    <img id="story-image" class="story-image" src="" alt="Story Scene">
+
+    <div id="story-text" class="text-box"></div>
+
+    <div id="choices" class="navigation"></div>
+  </div>
+
+  <script>
+    const storyPages = [
+      {
+        text: "On a hot summer day, a thirsty crow flew all over the fields looking for water.",
+        image: "https://api.a0.dev/assets/image?text=cartoon%20crow%20flying%20over%20dry%20fields%20looking%20for%20water&aspect=16:9",
+        choices: [
+          { text: "Keep searching for water", nextPage: 1 },
+          { text: "Go to a nearby garden", nextPage: 2 },
+        ]
+      },
+      {
+        text: "For a long time, it could not find any water. The crow felt very weak and tired.",
+        image: "https://api.a0.dev/assets/image?text=tired%20cartoon%20crow%20looking%20exhausted&aspect=16:9",
+        choices: [
+          { text: "Rest for a while", nextPage: 3 },
+          { text: "Continue searching", nextPage: 4 },
+        ]
+      },
+      {
+        text: "Finally, it saw a water pitcher in a garden. The crow flew straight down to it.",
+        image: "https://api.a0.dev/assets/image?text=garden%20with%20water%20pitcher%20and%20crow%20flying%20towards%20it&aspect=16:9",
+        choices: [
+          { text: "Try to drink from the pitcher", nextPage: 4 },
+          { text: "Look around for more water", nextPage: 6 },
+        ]
+      },
+      {
+        text: "The crow rested for a while under a tree, feeling the cool breeze slightly soothe him.",
+        image: "https://api.a0.dev/assets/image?text=crow%20resting%20under%20a%20tree%20in%20shade&aspect=16:9",
+        choices: [
+          { text: "Start searching again", nextPage: 2 }
+        ]
+      },
+      {
+        text: "The crow tried to drink from the pitcher but found that the water level was too low, and its beak couldn't reach it.",
+        image: "https://api.a0.dev/assets/image?text=crow%20trying%20to%20reach%20water%20in%20a%20pitcher&aspect=16:9",
+        choices: [
+          { text: "Fly away to find a higher pitcher", nextPage: 7 },
+          { text: "Look for pebbles nearby", nextPage: 8 },
+        ]
+      },
+      {
+        text: "The crow kept flying but didn’t find water. It became more tired and gave up.",
+        image: "https://api.a0.dev/assets/image?text=disappointed%20crow%20flying%20away%20in%20sunset&aspect=16:9",
+        choices: [
+          { text: "Restart the story", nextPage: 0 }
+        ]
+      },
+      {
+        text: "The crow found another pitcher but it too had very little water. It needed a better idea.",
+        image: "https://api.a0.dev/assets/image?text=crow%20looking%20at%20another%20empty%20pitcher%20sadly&aspect=16:9",
+        choices: [
+          { text: "Go back to the first pitcher", nextPage: 4 }
+        ]
+      },
+      {
+        text: "The crow picked up some pebbles and dropped them into the pitcher one by one.",
+        image: "https://api.a0.dev/assets/image?text=crow%20dropping%20pebbles%20into%20pitcher%20water%20rising&aspect=16:9",
+        choices: [
+          { text: "Drop more pebbles", nextPage: 9 },
+          { text: "Try using a stick", nextPage: 10 }
+        ]
+      },
+      {
+        text: "As the crow dropped more pebbles, the water slowly rose to the top!",
+        image: "https://api.a0.dev/assets/image?text=pebbles%20filling%20pitcher%20with%20water%20rising&aspect=16:9",
+        choices: [
+          { text: "Drink the water", nextPage: 11 }
+        ]
+      },
+      {
+        text: "The crow tried to push the water up with a stick, but it didn’t work.",
+        image: "https://api.a0.dev/assets/image?text=crow%20using%20stick%20in%20pitcher%20without%20success&aspect=16:9",
+        choices: [
+          { text: "Use pebbles instead", nextPage: 8 }
+        ]
+      },
+      {
+        text: "Finally, the water rose high enough for the crow to drink! The crow's intelligence saved the day!",
+        image: "https://api.a0.dev/assets/image?text=happy%20crow%20drinking%20water%20from%20pitcher&aspect=16:9",
+        choices: [
+          { text: "Relax under a tree", nextPage: 12 },
+          { text: "Fly away happily", nextPage: 13 },
+        ]
+      },
+      {
+        text: "With a full tummy, the crow sat under a shady tree and rested peacefully.",
+        image: "https://api.a0.dev/assets/image?text=crow%20resting%20under%20tree%20with%20happy%20face&aspect=16:9",
+        choices: [
+          { text: "Restart story", nextPage: 0 }
+        ]
+      },
+      {
+        text: "The crow flew high into the sky, proud of its cleverness and ready for new adventures.",
+        image: "https://api.a0.dev/assets/image?text=cartoon%20crow%20flying%20in%20blue%20sky%20with%20sun&aspect=16:9",
+        choices: [
+          { text: "Restart story", nextPage: 0 }
+        ]
+      }
+    ];
+
+    let currentPage = 0;
+
+    const storyText = document.getElementById('story-text');
+    const storyImage = document.getElementById('story-image');
+    const pageNumber = document.getElementById('page-number');
+    const choicesDiv = document.getElementById('choices');
+
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      const voices = speechSynthesis.getVoices();
+      const femaleVoice = voices.find(voice => voice.name.toLowerCase().includes('female'));
+      if (femaleVoice) {
+        utterance.voice = femaleVoice;
+      } else {
+        utterance.pitch = 1.5;
+      }
+      utterance.rate = 1;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utterance);
+    }
+
+    function updatePage() {
+      const page = storyPages[currentPage];
+      storyText.style.opacity = 0;
+      storyImage.style.opacity = 0;
+      choicesDiv.innerHTML = '';
+
+      setTimeout(() => {
+        storyText.innerText = page.text;
+        storyImage.src = page.image;
+        pageNumber.innerText = `Page ${currentPage + 1} of ${storyPages.length}`;
+
+        page.choices.forEach(choice => {
+          const choiceBtn = document.createElement('button');
+          choiceBtn.classList.add('btn');
+          choiceBtn.innerText = choice.text;
+          choiceBtn.addEventListener('click', () => {
+            currentPage = choice.nextPage;
+            updatePage();
+          });
+          choicesDiv.appendChild(choiceBtn);
+        });
+
+        storyText.style.opacity = 1;
+        storyImage.style.opacity = 1;
+        speak(page.text);
+      }, 300);
+    }
+
+    updatePage();
+
+    speechSynthesis.onvoiceschanged = () => {};
+  </script>
+
+</body>
+</html>
